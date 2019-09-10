@@ -24,7 +24,7 @@ def find(fd, NT_Offset):
     print("[NT_Header]")
     print("{}\t\t{}\t\t{} ".format("offset","value","description"))
     print("============================================")
-    print("{:08x}\t{}\t{}".format(NT_Offset+4, Machine, "Machine"))
+    print("{:08x}\t{:04x}\t{}".format(NT_Offset+4, Machine, "Machine"))
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+6, NumbersOfSection, "NumbersOfSection"))
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+8, TimeDateStamp, "TimeDateStamp"))
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+20, SizeOfOptionalHeader, "SizeOfOptionalHeader"))
