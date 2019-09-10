@@ -5,8 +5,9 @@ Created on Mon Sep  9 18:52:50 2019
 @author: dhk13
 """
 #import pefile
-import binascii
 import modules.DOS_Header as DOS_Header
+import modules.NT_Header as NT_Header
+
 #PEheader=pefile.PE('C:\\Windows\\System32\\notepad.exe')
 
 '''
@@ -27,7 +28,8 @@ print(seek_data)   #read를 하면 b'가 같이 저장되는데
 
 def main():
     fd=open('C:\\Windows\\System32\\notepad.exe', 'rb')
-    DOS_Header.find(fd)
     
+    NT_Offset=DOS_Header.find(fd)
+    NT_Header.find(fd, NT_Offset)
 if __name__=="__main__":
     main()
