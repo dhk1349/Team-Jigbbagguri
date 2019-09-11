@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 """
 Created on Tue Sep 10 01:39:19 2019
@@ -14,7 +15,8 @@ def find(fd, NT_Offset):
         print("Invalid NT Header")
         sys.exit()
         
-
+#This part is File Header
+        
     Machine = libs.little(data[4:6])
     NumbersOfSection = libs.little(data[6:8])
     TimeDateStamp = libs.little(data[8:12])
@@ -29,3 +31,22 @@ def find(fd, NT_Offset):
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+8, TimeDateStamp, "TimeDateStamp"))
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+20, SizeOfOptionalHeader, "SizeOfOptionalHeader"))
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+28, Chars, "Characteristics"))
+    
+#This part is Optional Header 
+#This part is not tested
+    fd.seek(NT_Offset+20, 0)
+    data=fd.read(224)  #need to check exact number
+    Magic=libs.little(data[0:2]) #010B or 020B
+    BitStructure = "32bits" #determine if its 32 bits or 64 bits
+    if(Magic==0x020B):
+        BitStructure="64bits"
+    AddressOfEntryPoint 
+    ImageBase
+    SectionAlignment
+    FileAlignment
+    SizeOfImage
+    SizeOfHeader
+    Subsystem
+    NumbersOfRvaAndSizes
+    
+    #find location of IMAGE_DATA_DIRECTORY
