@@ -40,13 +40,17 @@ def find(fd, NT_Offset):
     BitStructure = "32bits" #determine if its 32 bits or 64 bits
     if(Magic==0x020B):
         BitStructure="64bits"
-    AddressOfEntryPoint 
-    ImageBase
-    SectionAlignment
-    FileAlignment
-    SizeOfImage
-    SizeOfHeader
-    Subsystem
-    NumbersOfRvaAndSizes
-    
+    AddressOfEntryPoint = libs.little(data[16:20])
+    SectionAlignment = libs.little(data[32:36])
+    FileAlignment = libs.little(data[36:40])
+    SizeOfImage = libs.little(data[56:60])
+    SizeOfHeader = libs.little(data[60:60])
+    Subsystem = libs.little(data[68:70])
+    NumbersOfRvaAndSize libs.little(data[92:108])
+    if (BitStructure=="32bits"):
+        ImageBase = libs.little(data[28:32])
+    else: #64bits
+        ImageBase = libs.little(data[24:32])
+        
+        
     #find location of IMAGE_DATA_DIRECTORY
