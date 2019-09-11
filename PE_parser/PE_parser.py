@@ -7,6 +7,7 @@ Created on Mon Sep  9 18:52:50 2019
 #import pefile
 import modules.DOS_Header as DOS_Header
 import modules.NT_Header as NT_Header
+import modules.Section_Header as Section_Header
 
 #PEheader=pefile.PE('C:\\Windows\\System32\\notepad.exe')
 
@@ -30,6 +31,8 @@ def main():
     fd=open('C:\\Windows\\System32\\notepad.exe', 'rb')
     
     NT_Offset=DOS_Header.find(fd)
-    NT_Header.find(fd, NT_Offset)
+    NT_size, sections =NT_Header.find(fd, NT_Offset)
+    Section_Header.find(fd, NT_Offset+NT_size, sections)
+    
 if __name__=="__main__":
     main()

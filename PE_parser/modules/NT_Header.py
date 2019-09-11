@@ -43,24 +43,43 @@ def find(fd, NT_Offset):
         BitStructure = "32bits" #determine if its 32 bits or 64 bits
     elif(Magic==0x020B):
         BitStructure = "64bits"
-    
+    if(BitStructure=="None"):
+        print("Something wrong with optional header parser")
+        sys.exit()
     AddressOfEntryPoint = libs.little(data[16:20])
     SectionAlignment = libs.little(data[32:36])
     FileAlignment = libs.little(data[36:40])
     SizeOfImage = libs.little(data[56:60])
-    SizeOfHeader = libs.little(data[60:60])
+    SizeOfHeader = libs.little(data[60:64])
     Subsystem = libs.little(data[68:70])
-    NumbersOfRvaAndSize = libs.little(data[92:108])
-    if (BitStructure=="32bits"):
+    if (BitStructure=="32bits"):        
         ImageBase = libs.little(data[28:32])
-    elif (BitStructure): #64bits
+        NumbersOfRvaAndSize = libs.little(data[92:96])
+    elif (BitStructure=="64bits"): #64bits
         ImageBase = libs.little(data[24:32])
+        NumbersOfRvaAndSize = libs.little(data[108:112])
 
-    print("[NT_Header]-Optional Header")
+    print("[NT_Header]-Optional Header {} structure".format(BitStructure))
     print("{}\t\t{}\t\t{} ".format("offset","value","description"))
     print("============================================")
-    print("{:x}".format(Magic))
-    print(BitStructure)
-    print("{:08x}\t{:04x}\t{}".format(NT_Offset+4, Magic, "Magic"))
 
+    print("{:08x}\t{:04x}\t{}".format(NT_Offset+24, Magic, "Magic"))
+    print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+16   , AddressOfEntryPoint, "Address of Entry  Point"))
+    if(BitStructure=="32bits"):
+        print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+28   , ImageBase, "ImageBase"))
+    elif (BitStructure=="64bits"):
+        print("{:08x}\t{:016x}\t{}".format(NT_Offset+24+24   , ImageBase, "ImageBase"))
+        
+    
+    print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+32   , SectionAlignment, "SectionAlignment"))
+    print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+36   , FileAlignment, "FileAlignment"))
+    print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+56   , SizeOfImage, "SizeOfImage"))
+    print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+60   , SizeOfHeader, "SizeOfHeader"))
+    print("{:08x}\t{:04x}\t{}".format(NT_Offset+24+68   , Subsystem, "Subsystem"))
+    if(BitStructure=="32bits"):
+        print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+92   , NumbersOfRvaAndSize, "NumbersOfRvaAndSize"))
+    elif (BitStructure=="64bits"):
+        print("{:08x}\t{:08x}\t{}".format(NT_Offset+24+108   , NumbersOfRvaAndSize, "NumbersOfRvaAndSize"))
+    print("\n")
+    return 24+SizeOfOptionalHeader, NumbersOfSection
     #find location of IMAGE_DATA_DIRECTORY
