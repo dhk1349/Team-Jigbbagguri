@@ -44,19 +44,23 @@ def find(fd, NT_Offset):
     elif(Magic==0x020B):
         BitStructure = "64bits"
     
-    AddressOfEntryPoint 
-    ImageBase
-    SectionAlignment
-    FileAlignment
-    SizeOfImage
-    SizeOfHeader
-    Subsystem
-    NumbersOfRvaAndSizes
-    """
+    AddressOfEntryPoint = libs.little(data[16:20])
+    SectionAlignment = libs.little(data[32:36])
+    FileAlignment = libs.little(data[36:40])
+    SizeOfImage = libs.little(data[56:60])
+    SizeOfHeader = libs.little(data[60:60])
+    Subsystem = libs.little(data[68:70])
+    NumbersOfRvaAndSize = libs.little(data[92:108])
+    if (BitStructure=="32bits"):
+        ImageBase = libs.little(data[28:32])
+    elif (BitStructure): #64bits
+        ImageBase = libs.little(data[24:32])
+
     print("[NT_Header]-Optional Header")
     print("{}\t\t{}\t\t{} ".format("offset","value","description"))
     print("============================================")
     print("{:x}".format(Magic))
     print(BitStructure)
     print("{:08x}\t{:04x}\t{}".format(NT_Offset+4, Magic, "Magic"))
+
     #find location of IMAGE_DATA_DIRECTORY
