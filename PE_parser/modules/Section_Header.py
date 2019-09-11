@@ -19,14 +19,14 @@ def find(fd, offset, sections):
 def section_iterator(offset,fd):
     fd.seek(offset)
     data=fd.read(40)
-    Name = libs.big(data[0:8])
+    Name = libs.big(data[0:6])
     VirtualSize = libs.little(data[8:12])
     VirtualAddress = libs.little(data[12:16])
     SizeOfRawData = libs.little(data[16:20])
     PointerToRawData = libs.little(data[20:24])
     Chars = libs.little(data[36:40])
 
-    print("{:08x}\t{:016x}\t{}".format(offset+0, Name, "Name"))
+    print("{:08x}\t{:05x}\t{}".format(offset+0, Name, "Name"))
     print("{:08x}\t{:04x}\t{}".format(offset+8, VirtualSize, "VirtualSize"))
     print("{:08x}\t{:04x}\t{}".format(offset+12, VirtualAddress, "VirtualAddress"))
     print("{:08x}\t{:04x}\t{}".format(offset+16, SizeOfRawData, "SizeOfRawData"))
